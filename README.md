@@ -10,6 +10,8 @@ This repository demonstrates key features of the Django REST Framework:
 
 - **Custom Permissions**:
   - Define and apply custom permissions to control access to specific parts of your API, ensuring security and privacy.
+    
+- **Authentication** - https://www.django-rest-framework.org/api-guide/authentication/
 
 ## 📚 Task: Implement Pagination, Filtering, and Custom Permissions
 
