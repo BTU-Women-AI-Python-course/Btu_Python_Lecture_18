@@ -91,6 +91,26 @@ REST_FRAMEWORK = {
 }
 ```
 
+### Pagination and ViewSet
+
+```python
+from rest_framework import viewsets
+from rest_framework.pagination import PageNumberPagination
+from .models import Product
+from .serializers import ProductSerializer
+
+class ProductPagination(PageNumberPagination):
+    page_size = 5  # Number of items per page
+    page_size_query_param = 'page_size'  # Allows clients to set page size
+    max_page_size = 10  # Maximum page size limit
+
+class ProductViewSet(viewsets.ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    pagination_class = ProductPagination
+
+```
+
 ### Using Pagination
 
 - **PageNumberPagination**: You can navigate through pages using the query parameters:
