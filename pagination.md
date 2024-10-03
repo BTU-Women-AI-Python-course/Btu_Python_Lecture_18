@@ -1,13 +1,11 @@
 # Django Rest Framework Pagination
 
-Django REST Framework (DRF) provides several ways to implement pagination in your API views, 
-allowing you to limit the number of results returned in a single response. 
-This helps improve performance and enhances user experience when dealing with large datasets.
+Django REST Framework (DRF) provides several ways to implement pagination in your API views, allowing you to limit the number of results returned in a single response. This helps improve performance and enhances user experience when dealing with large datasets.
 
 ### Pagination Types in Django REST Framework
 
 1. **PageNumberPagination**:
-   - This is the default pagination style in DRF. It provides pagination by splitting the results into pages and using query parameters to navigate between them.
+   - This is the default pagination style in DRF. It splits the results into pages and uses query parameters to navigate between them.
    - **Usage**:
      ```python
      from rest_framework.pagination import PageNumberPagination
@@ -31,8 +29,12 @@ This helps improve performance and enhances user experience when dealing with la
              return paginator.get_paginated_response(page)
      ```
 
+   **Navigation Example**:
+   - `/api/my-endpoint/?page=2` (Navigate to page 2)
+   - `/api/my-endpoint/?page=1&page_size=5` (Navigate to page 1 with 5 results per page)
+
 2. **LimitOffsetPagination**:
-   - This style uses a `limit` and `offset` to control the number of results returned. It is useful for implementing infinite scrolling.
+   - This style uses `limit` and `offset` query parameters to control the number of results returned. It is useful for implementing infinite scrolling.
    - **Usage**:
      ```python
      from rest_framework.pagination import LimitOffsetPagination
@@ -55,8 +57,12 @@ This helps improve performance and enhances user experience when dealing with la
              return paginator.get_paginated_response(page)
      ```
 
+   **Navigation Example**:
+   - `/api/my-endpoint/?limit=10&offset=20` (Fetch 10 results starting from the 21st record)
+   - `/api/my-endpoint/?limit=5&offset=0` (Fetch the first 5 results)
+
 3. **CursorPagination**:
-   - This style is based on a cursor (a unique field, such as an ID), allowing more efficient pagination by providing a pointer to the next set of results.
+   - This style uses a cursor (a unique field such as an ID) to provide a pointer to the next set of results, making pagination more efficient.
    - **Usage**:
      ```python
      from rest_framework.pagination import CursorPagination
@@ -78,6 +84,11 @@ This helps improve performance and enhances user experience when dealing with la
              page = paginator.paginate_queryset(queryset, request)
              return paginator.get_paginated_response(page)
      ```
+
+   **Navigation Example**:
+   - The response will contain encoded `next` and `previous` links:
+     - `"next": "http://example.com/api/my-endpoint/?cursor=cD0xMjM0NTY="` (Fetch the next page)
+     - `"previous": "http://example.com/api/my-endpoint/?cursor=cD0xMjM0NTU="` (Fetch the previous page)
 
 ### Configuring Pagination Globally
 
@@ -108,22 +119,26 @@ class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     pagination_class = ProductPagination
-
 ```
 
 ### Using Pagination
 
-- **PageNumberPagination**: You can navigate through pages using the query parameters:
-  - `/api/my-endpoint/?page=2`
-  - `/api/my-endpoint/?page_size=5`
-
-- **LimitOffsetPagination**: Use the following parameters:
-  - `/api/my-endpoint/?limit=10&offset=20`
-
-- **CursorPagination**: The response will contain a `next` and `previous` field with encoded cursors to navigate through the pages.
+- **PageNumberPagination**:
+  - **Link Examples**:
+    - `/api/my-endpoint/?page=2` (Navigate to page 2)
+    - `/api/my-endpoint/?page_size=5` (Set page size to 5)
+  
+- **LimitOffsetPagination**:
+  - **Link Examples**:
+    - `/api/my-endpoint/?limit=10&offset=20` (Fetch 10 results starting from the 21st result)
+    - `/api/my-endpoint/?limit=5` (Fetch 5 results)
+  
+- **CursorPagination**:
+  - **Link Examples**:
+    - The `next` and `previous` links will be automatically generated in the API response as encoded cursor values, such as:
+      - `"next": "http://example.com/api/my-endpoint/?cursor=cD0xMjM0NTY="`
+      - `"previous": "http://example.com/api/my-endpoint/?cursor=cD0xMjM0NTU="`
 
 ### Conclusion
 
-Pagination is a crucial aspect of API design that enhances performance and user experience.
-Django REST Framework provides flexible options to implement pagination according to your needs. 
-You can choose the pagination style that best fits your application requirements and configure it globally or on a per-view basis.
+Pagination is a crucial aspect of API design that enhances performance and user experience. Django REST Framework provides flexible options to implement pagination according to your needs. You can choose the pagination style that best fits your application requirements and configure it globally or on a per-view basis.
