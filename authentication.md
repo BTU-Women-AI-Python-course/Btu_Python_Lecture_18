@@ -49,6 +49,18 @@ various authentication classes out of the box, which can be easily configured to
         print(token.key)  # This is the token to use for authentication
         ```
 
+     5. Register the token authentication API:
+        
+        ```python
+        from django.urls import path
+        from rest_framework.authtoken.views import obtain_auth_token
+         
+         urlpatterns = [
+          path('api/token/', obtain_auth_token, name='token_obtain'),
+         ]
+        ```
+
+
    - **Usage in View**:
      ```python
      from rest_framework.authentication import TokenAuthentication
