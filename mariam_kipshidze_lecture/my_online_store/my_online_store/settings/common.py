@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'adminsortable2',
     'import_export',
     'rest_framework',
+    'django_filters',
 
     'product',
     'user'
@@ -86,6 +87,13 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# REST_FRAMEWORK = {
+#     'DEFAULT_FILTER_BACKENDS': (
+#         'django_filters.rest_framework.DjangoFilterBackend',
+#         ...
+#     ),
+# }
 
 
 # Password validation

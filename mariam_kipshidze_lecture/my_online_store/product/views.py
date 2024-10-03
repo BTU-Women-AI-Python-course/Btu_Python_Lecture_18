@@ -1,7 +1,9 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, mixins
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
 
+from product.filters import ProductFilter
 from product.models import Product
 from product.pagination import SmallPageNumberPagination, ProductLimitOffsetPagination, ProductCursorPagination
 from product.serializers import ProductSerializer, MutateProductSerializer, CreateProductSerializer, \
@@ -40,3 +42,5 @@ class ProductCreateListDetailViewSet(
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     pagination_class = SmallPageNumberPagination
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = ProductFilter
