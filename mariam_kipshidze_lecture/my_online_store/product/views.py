@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
 
 from product.models import Product
+from product.pagination import SmallPageNumberPagination, ProductLimitOffsetPagination, ProductCursorPagination
 from product.serializers import ProductSerializer, MutateProductSerializer, CreateProductSerializer, \
     ProductDynamicFieldsSerializer
 
@@ -38,3 +39,4 @@ class ProductCreateListDetailViewSet(
 ):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    pagination_class = SmallPageNumberPagination
