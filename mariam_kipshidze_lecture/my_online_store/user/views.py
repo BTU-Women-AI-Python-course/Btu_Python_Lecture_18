@@ -5,6 +5,11 @@ from user.forms import CustomUserCreationForm
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 
+from rest_framework import generics, status
+from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.serializers import AuthTokenSerializer
+
 def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
@@ -42,3 +47,22 @@ def logout(request):
 
 def home(request):
     return render(request, 'home.html')
+
+
+
+class CustomAuthToken(generics.GenericAPIView):
+    serializer_class = AuthTokenSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        user = serializer.validated_data['user']
+
+        token, created = Token.objects.get_or_create(user=user)
+
+        return Response({
+            'token': token.key,
+            'user_id': user.pk,
+            'email': user.email
+        }, status=status.HTTP_200_OK)
