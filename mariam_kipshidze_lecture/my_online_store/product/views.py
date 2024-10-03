@@ -8,6 +8,7 @@ from product.models import Product
 from product.pagination import SmallPageNumberPagination, ProductLimitOffsetPagination, ProductCursorPagination
 from product.serializers import ProductSerializer, MutateProductSerializer, CreateProductSerializer, \
     ProductDynamicFieldsSerializer
+from user.permissiopns import IsActiveUser
 
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -44,3 +45,4 @@ class ProductCreateListDetailViewSet(
     pagination_class = SmallPageNumberPagination
     filter_backends = (DjangoFilterBackend,)
     filterset_class = ProductFilter
+    permission_classes = [IsAuthenticated, IsActiveUser]
